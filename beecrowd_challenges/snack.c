@@ -1,17 +1,26 @@
 #include <stdio.h>
 
 int main() {
-  int X, Y;
-  float snack;
+  double item, qtd, total, value;
 
-  scanf("%d %d", &X, &Y);
+  scanf("%lf", &item);
+  scanf("%lf", &qtd);
 
-  float ar[5] = {4.0,4.5,5.0,2.0,1.5};
+  if (item == 1) {
+    value = 4;
+  } else if (item == 2) {
+    value = 4.5;
+  } else if (item == 3) {
+    value = 5;
+  } else if (item == 4) {
+    value = 2;
+  } else if (item == 5) {
+    value = 1.5;
+  }
 
-  snack = ar[X - 1] * Y;
+  total = value * qtd;
 
-  printf("TOTAL: R$ %.2lf\n", snack);
+  printf("Total: R$ %.2lf\n", total);
 
   return 0;
 }
-

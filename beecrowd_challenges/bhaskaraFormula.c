@@ -1,6 +1,6 @@
 
-#include <math.h>
 #include <stdio.h>
+#include <math.h>
 
 int main() {
   double A, B, C, x1, x2, delta;
