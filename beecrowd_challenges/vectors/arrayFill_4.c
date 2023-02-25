@@ -1,4 +1,5 @@
 #include <stdio.h>
+
 int main() {
   int a, b, c = 0, d, e, f, g, h, i, j, l = 0, m = 0, x = 0, n, p, par[5],
             impar[5], ara[15];
