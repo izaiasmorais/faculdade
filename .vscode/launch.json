@@ -3,6 +3,27 @@
 	"configurations": [
 		{
 			"type": "java",
+			"name": "extrato",
+			"request": "launch",
+			"mainClass": "poo.extrato",
+			"projectName": "faculdade_6eb07729"
+		},
+		{
+			"type": "java",
+			"name": "alunosIdade",
+			"request": "launch",
+			"mainClass": "alunosIdade",
+			"projectName": "faculdade_6eb07729"
+		},
+		{
+			"type": "java",
+			"name": "conta",
+			"request": "launch",
+			"mainClass": "poo.conta",
+			"projectName": "faculdade_6eb07729"
+		},
+		{
+			"type": "java",
 			"name": "helloWorld",
 			"request": "launch",
 			"mainClass": "helloWorld",
