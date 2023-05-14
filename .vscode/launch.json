@@ -3,6 +3,13 @@
 	"configurations": [
 		{
 			"type": "java",
+			"name": "Main",
+			"request": "launch",
+			"mainClass": "poo.Main",
+			"projectName": "faculdade_6eb07729"
+		},
+		{
+			"type": "java",
 			"name": "extrato",
 			"request": "launch",
 			"mainClass": "poo.extrato",

@@ -62,5 +62,7 @@ public class alunosIdade {
 		System.out.println("Aluno mais novo: " + alunoMaisNovo.getNome() + ", idade: " + alunoMaisNovo.getIdade());
 
 		System.out.println("Média de idades: " + mediaIdades);
+
+		scanner.close();
 	}
 }
