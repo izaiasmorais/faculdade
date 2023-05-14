@@ -4,15 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Extrato {
-	private List<Transacao> extrato = new ArrayList<>();
-	private float saldo = 0;
+	private List<Transacao> extrato;
+	private float saldo;
+
+	public Extrato() {
+		extrato = new ArrayList<>();
+		saldo = 0;
+	}
 
 	public float getSaldo() {
 		return saldo;
 	}
 
 	public List<Transacao> getExtrato() {
-		return extrato;
+		return new ArrayList<>(extrato);
 	}
 
 	public void credito(float valor) {

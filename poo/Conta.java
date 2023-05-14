@@ -3,7 +3,7 @@ package poo;
 public class Conta {
 	private int numero;
 	private Pessoa dono;
-	private Extrato extrato;
+	private Extrato extrato = new Extrato();
 	private String extratoLista = "";
 
 	public Conta(int numero, Pessoa dono) {
@@ -21,23 +21,15 @@ public class Conta {
 		return numero;
 	}
 
-	public float getSaldo() {
-		return extrato.getSaldo();
-	}
-
 	public Pessoa getDono() {
 		return dono;
 	}
 
-	public void credito(float value) {
-		extrato.credito(value);
+	public Extrato getExtrato() {
+		return extrato;
 	}
 
-	public void debito(float value) {
-		extrato.debito(value);
-	}
-
-	public String getExtrato() {
+	public String getExtratoLista() {
 		for (Transacao transacao : extrato.getExtrato()) {
 			extratoLista = extratoLista + transacao.nome + ": R$ " + transacao.valor + "\n";
 		}

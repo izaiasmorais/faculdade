@@ -7,14 +7,16 @@ public class Main {
 
 		Conta minhaConta = new Conta(456, pessoa);
 
-		// minhaConta.credito(1000);
-		// minhaConta.debito(300);
-		// minhaConta.credito(800);
-		// minhaConta.debito(250);
+		Extrato extratoConta = minhaConta.getExtrato();
 
-		// System.out.println(minhaConta.getExtrato());
+		extratoConta.credito(1000);
+		extratoConta.debito(300);
+		extratoConta.credito(800);
+		extratoConta.debito(250);
 
-		System.out.println("Saldo Total: R$ " + minhaConta.getSaldo());
+		System.out.println(minhaConta.getExtratoLista());
+
+		System.out.println("Saldo Total: R$ " + extratoConta.getSaldo());
 
 		System.out.println("Dono: " + minhaConta.getDono().getNome());
 	}
