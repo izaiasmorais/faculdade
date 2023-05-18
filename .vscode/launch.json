@@ -3,6 +3,13 @@
 	"configurations": [
 		{
 			"type": "java",
+			"name": "Moda",
+			"request": "launch",
+			"mainClass": "moda.Moda",
+			"projectName": "faculdade_6eb07729"
+		},
+		{
+			"type": "java",
 			"name": "Main",
 			"request": "launch",
 			"mainClass": "poo.Main",
