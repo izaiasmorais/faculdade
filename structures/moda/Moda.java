@@ -3,36 +3,43 @@ package moda;
 import java.util.Scanner;
 
 public class Moda {
-	public static class Posicao {
-		int numero;
-		int qtd;
-
-		public Posicao(int numero, int qtd) {
-			this.numero = numero;
-			this.qtd = qtd;
-		}
-	}
-
 	public static void main(String[] args) {
-		Scanner scan = new Scanner(System.in);
+		Scanner scanner = new Scanner(System.in);
 
-		Posicao array[] = new Posicao[5];
+		int[] numbers = new int[100];
+		int[] quantities = new int[100];
+		int index = 0;
 
-		for (int i = 0; i < 5; i++) {
-			System.out.println("Digite um numero: ");
-			int numero = scan.nextInt();
+		System.out.println("Digite os números (0 para sair):");
 
-			if (array[i] != null && array[i].numero == numero) {
-				array[i].qtd = array[i].qtd + 1;
+		while (true) {
+			int input = scanner.nextInt();
+			if (input == 0) {
+				break;
+			}
+
+			int existingIndex = -1;
+			for (int i = 0; i < index; i++) {
+				if (numbers[i] == input) {
+					existingIndex = i;
+					break;
+				}
+			}
+
+			if (existingIndex != -1) {
+				quantities[existingIndex]++;
 			} else {
-				array[i] = new Posicao(numero, 1);
+				numbers[index] = input;
+				quantities[index] = 1;
+				index++;
 			}
 		}
 
-		for (Posicao posicao : array) {
-			System.out.println("Numero: " + posicao.numero + " | " + "Quantiade: " + posicao.qtd);
+		System.out.println("Elementos no formato {number: int, quantity: int}:");
+		for (int i = 0; i < index; i++) {
+			System.out.println("Numero: " + numbers[i] + " | Quantidade: " + quantities[i]);
 		}
 
-		scan.close();
+		scanner.close();
 	}
 }
