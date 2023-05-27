@@ -2,7 +2,7 @@ package moda;
 
 import java.util.Scanner;
 
-public class Moda {
+public class moda {
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
 
