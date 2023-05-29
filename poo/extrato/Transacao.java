@@ -1,4 +1,4 @@
-package poo;
+package poo.extrato;
 
 public class Transacao {
 	String nome;
