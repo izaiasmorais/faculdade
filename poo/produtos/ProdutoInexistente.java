@@ -1,0 +1,3 @@
+class ProdutoInexistente extends Exception {
+	
+}
