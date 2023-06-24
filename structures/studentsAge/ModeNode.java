@@ -1,4 +1,4 @@
-package alunosIdade;
+package studentsAge;
 
 public class ModeNode {
 	int age;

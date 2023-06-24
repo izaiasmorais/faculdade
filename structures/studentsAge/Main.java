@@ -1,4 +1,4 @@
-package alunosIdade;
+package studentsAge;
 
 import java.util.Scanner;
 

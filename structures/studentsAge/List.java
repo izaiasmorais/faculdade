@@ -1,4 +1,4 @@
-package alunosIdade;
+package studentsAge;
 
 public class List {
 	Node start;

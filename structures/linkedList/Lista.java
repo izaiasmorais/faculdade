@@ -1,4 +1,4 @@
-package encadeada;
+package linkedList;
 
 public class Lista {
 	private Node inicio;

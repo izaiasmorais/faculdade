@@ -1,3 +1,5 @@
+package priotityQueue;
+
 public class Node {
 	People people;
 	Node prev;

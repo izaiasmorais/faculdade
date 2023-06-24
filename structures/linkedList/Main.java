@@ -1,4 +1,4 @@
-package encadeada;
+package linkedList;
 
 import java.util.Scanner;
 

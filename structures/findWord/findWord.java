@@ -1,4 +1,4 @@
-package encontrarPalavra;
+package findWord;
 
 public class findWord {
 
