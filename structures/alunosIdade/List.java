@@ -6,6 +6,7 @@ public class List {
 	int size;
 	int oldest;
 	int newest;
+	float sum = 0;
 
 	public List() {
 		this.start = null;
@@ -26,15 +27,17 @@ public class List {
 			this.end.next = newNode;
 			this.end = newNode;
 			this.size++;
-
-			if (newNode.age < this.newest) {
-				this.newest = newNode.age;
-			}
-
-			if (newNode.age > this.oldest) {
-				this.oldest = newNode.age;
-			}
 		}
+
+		if (newNode.age < this.newest) {
+			this.newest = newNode.age;
+		}
+
+		if (newNode.age > this.oldest) {
+			this.oldest = newNode.age;
+		}
+
+		this.sum += newNode.age;
 	}
 
 	public void listAges() {
@@ -48,9 +51,35 @@ public class List {
 		System.out.println(" ");
 	}
 
-	public void getNewestAndOldest() {
-		System.out.println("Newest student age: " + this.newest + "\n");
-		System.out.println("Oldest student age: " + this.oldest + "\n");
+	public int getNewest() {
+		return this.newest;
+	}
+
+	public int getOldest() {
+		return this.oldest;
+	}
+
+	public float getAverage() {
+		return this.sum / size;
+	}
+
+	public int getMedian() {
+		Node aux = this.start;
+		int current = 1;
+
+		if (this.getSize() % 2 != 0) {
+			while (current <= ((this.size - 1) / 2)) {
+				aux = aux.next;
+				current++;
+			}
+			return aux.age;
+		} else {
+			while (current < (this.size / 2)) {
+				aux = aux.next;
+				current++;
+			}
+			return (aux.age + aux.next.age) / 2;
+		}
 	}
 
 	public int getSize() {
