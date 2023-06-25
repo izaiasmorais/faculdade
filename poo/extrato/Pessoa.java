@@ -1,4 +1,4 @@
-package poo.extrato;
+package extrato;
 
 public class Pessoa {
 	private String nome;

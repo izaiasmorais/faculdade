@@ -1,4 +1,4 @@
-package poo.extrato;
+package extrato;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package poo.extrato;
+package extrato;
 
 public class Main {
 	public static void main(String[] args) {
