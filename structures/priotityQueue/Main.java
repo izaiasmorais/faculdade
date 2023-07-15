@@ -33,9 +33,7 @@ public class Main {
 			} else if (opcao == 5) {
 
 			}
-
 		}
-
 		scan.close();
 	}
 }
