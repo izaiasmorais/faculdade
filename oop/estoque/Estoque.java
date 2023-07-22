@@ -4,86 +4,74 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Estoque {
-	List<Produto> produtos;
+	private List<Produto> produtos;
 
 	public Estoque() {
-		produtos = new ArrayList<>();
+		this.produtos = new ArrayList<>();
 	}
 
-	public void incluir(Produto p) {
-		for (Produto produto : produtos) {
-			if (p.cod == produto.cod) {
-				System.out.println("Produto com o mesmo codigo ja adicionado");
+	public void incluir(Produto produto) {
+		if (produto.getCodigo() < 0 || produto.getFornecedor().getCnpj() <= 0 || produto.getLucro() < 0
+				|| produto.getEstoqueMinimo() < 0) {
+			return;
+		}
+
+		for (Produto p : produtos) {
+			if (p.getCodigo() == produto.getCodigo()) {
 				return;
 			}
 		}
 
-		produtos.add(p);
+		produtos.add(produto);
 	}
 
-	public void comprar(int cod, int quantidade, double preco) {
-		if (quantidade < 0 || preco < 0) {
-			return;
-		}
-
+	public void comprar(int codigo, int quantidade, double preco) {
 		for (Produto produto : produtos) {
-			if (produto.getCod() == cod) {
-				produto.setQuantidade(produto.getQuantidade() + quantidade);
-
-				double novoPreco = ((produto.getQuantidade() * produto.getPrecoCompra()) + (quantidade * preco))
-						/ (produto.getQuantidade() + quantidade);
-
-				produto.setPrecoCompra(novoPreco);
-
-				produto.setPrecoVenda(novoPreco + (novoPreco * produto.getLucro()));
+			if (produto.getCodigo() == codigo) {
+				produto.compra(quantidade, preco);
+				return;
 			}
 		}
 	}
 
-	public double vender(int cod, int quant) {
-
-		for (Produto produto : produtos) {
-			if (produto.getCod() == cod) {
-				int quantidadeAtual = produto.getQuantidade();
-				if (quantidadeAtual < 0 || quantidadeAtual < quant) {
-					break;
-				}
-				produto.setQuantidade(quantidadeAtual - quant);
-				return (quant * produto.getPrecoVenda());
-			}
+	public double vender(int codigo, int quantidade) {
+		if (quantidade < 0) {
+			return 0;
 		}
 
+		for (Produto produto : produtos) {
+			if (produto.getCodigo() == codigo) {
+				return produto.venda(quantidade);
+			}
+		}
 		return -1;
 	}
 
-	public int quantidade(int cod) {
-
+	public int quantidade(int codigo) {
 		for (Produto produto : produtos) {
-			if (produto.getCod() == cod) {
+			if (produto.getCodigo() == codigo) {
 				return produto.getQuantidade();
 			}
 		}
-		return -1;
+		return 0;
 	}
 
-	public Fornecedor fornecedor(int cod) {
+	public Fornecedor fornecedor(int codigo) {
 		for (Produto produto : produtos) {
-			if (produto.getCod() == cod) {
-				return produto.getForn();
+			if (produto.getCodigo() == codigo) {
+				return produto.getFornecedor();
 			}
 		}
 		return null;
 	}
 
 	public Produto[] estoqueAbaixoDoMinimo() {
-		List<Produto> produtosAbaixoDoEstoque = new ArrayList<>();
-
+		List<Produto> abaixoDoMinimo = new ArrayList<>();
 		for (Produto produto : produtos) {
-			if (produto.getQuantidade() < produto.getMin()) {
-				produtosAbaixoDoEstoque.add(produto);
+			if (produto.getQuantidade() < produto.getEstoqueMinimo()) {
+				abaixoDoMinimo.add(produto);
 			}
 		}
-
-		return produtosAbaixoDoEstoque.toArray(new Produto[0]);
+		return abaixoDoMinimo.toArray(new Produto[0]);
 	}
 }
