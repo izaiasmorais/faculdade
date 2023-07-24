@@ -12,7 +12,7 @@ public class Estoque {
 
 	public void incluir(Produto produto) {
 		if (produto.getCodigo() < 0 || produto.getFornecedor().getCnpj() <= 0 || produto.getLucro() < 0
-				|| produto.getEstoqueMinimo() < 0) {
+				|| produto.getEstoqueMinimo() < 0 || produto.getDescricao().trim().isEmpty()) {
 			return;
 		}
 
