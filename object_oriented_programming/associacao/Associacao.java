@@ -1,8 +1,13 @@
 package associacao;
 
+import java.util.ArrayList;
+
 public class Associacao {
 	int numero;
 	String nome;
+	Taxa taxa;
+	ArrayList<Associado> associados = new ArrayList<>();
+	ArrayList<Reuniao> reunioes = new ArrayList<>();
 
 	public Associacao(int numero, String nome) {
 		this.numero = numero;
@@ -23,6 +28,22 @@ public class Associacao {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public ArrayList<Associado> getAssociados() {
+		return associados;
+	}
+
+	public ArrayList<Reuniao> getReunioes() {
+		return reunioes;
+	}
+
+	public Taxa getTaxa() {
+		return taxa;
+	}
+
+	public void setTaxa(Taxa taxa) {
+		this.taxa = taxa;
 	}
 
 }

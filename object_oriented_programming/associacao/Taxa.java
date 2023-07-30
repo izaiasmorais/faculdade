@@ -34,6 +34,4 @@ public class Taxa {
 	public boolean isAdministrativa() {
 		return administrativa;
 	}
-
-
 }

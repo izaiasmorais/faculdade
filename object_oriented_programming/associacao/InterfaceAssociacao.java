@@ -47,21 +47,21 @@ public interface InterfaceAssociacao {
 	// Adiciona uma associação a ser gerenciada. Valida todos os campos para evitar
 	// dados não preenchidos.
 
-	public void adicionar(Associacao a) throws AssociacaoJaExistente, ValorInvalido;
+	public void adicionarAssociacao(Associacao a) throws AssociacaoJaExistente, ValorInvalido;
 
 	// Adiciona um associado a uma associação. Valida todos os campos para evitar
 	// dados não preenchidos.
 
-	public void adicionar(int associacao, Associado a) throws AssociacaoNaoExistente, AssociadoJaExistente, ValorInvalido;
+	public void adicionarAssociado(int associacao, Associado a) throws AssociacaoNaoExistente, AssociadoJaExistente, ValorInvalido;
 
 	// Adiciona uma reunião a uma associação. Valida todos os campos para evitar
 	// dados não preenchidos.
 
-	public void adicionar(int associacao, Reuniao r) throws AssociacaoNaoExistente, ReuniaoJaExistente, ValorInvalido;
+	public void adicionarReuniao(int associacao, Reuniao r) throws AssociacaoNaoExistente, ReuniaoJaExistente, ValorInvalido;
 
 	// Adiciona uma taxa a uma associação. Valida todos os campos para evitar dados
 	// não preenchidos.
 
-	public void adicionar(int associacao, Taxa t) throws AssociacaoNaoExistente, TaxaJaExistente, ValorInvalido;
+	public void adicionarTaxa(int associacao, Taxa t) throws AssociacaoNaoExistente, TaxaJaExistente, ValorInvalido;
 
 }

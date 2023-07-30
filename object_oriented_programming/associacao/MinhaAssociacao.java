@@ -36,7 +36,7 @@ public class MinhaAssociacao implements InterfaceAssociacao {
 		return 0.0;
 	}
 
-	public void adicionar(Associacao a) throws AssociacaoJaExistente, ValorInvalido {
+	public void adicionarAssociacao(Associacao a) throws AssociacaoJaExistente, ValorInvalido {
 		if (pesquisaAssociacao(a.getNumero()) != null)
 			throw new AssociacaoJaExistente();
 
@@ -46,23 +46,63 @@ public class MinhaAssociacao implements InterfaceAssociacao {
 		asssociacoes.add(a);
 	}
 
-	public void adicionar(int associacao, Associado a)
+	public void adicionarAssociado(int associacao, Associado a)
 			throws AssociacaoNaoExistente, AssociadoJaExistente, ValorInvalido {
+		if (pesquisaAssociacao(associacao) == null)
+			throw new AssociacaoNaoExistente();
+
+		if (pesquisaAssociado(a.getNumero(), associacao) != null)
+			throw new AssociadoJaExistente();
+
+		if (a.getNumero() <= 0 || a.getNome() == null || a.getNome().equals("") || a.getTelefone() == null
+				|| a.getTelefone().equals("") || a.getNascimento() == null || a.getDataAssociacao() == null)
+			throw new ValorInvalido();
+
+		pesquisaAssociacao(associacao).getAssociados().add(a);
+	}
+
+	public void adicionarReuniao(int associacao, Reuniao r)
+			throws AssociacaoNaoExistente, ReuniaoJaExistente, ValorInvalido {
+		if (pesquisaAssociacao(associacao) == null)
+			throw new AssociacaoNaoExistente();
+
+		if (r.getAta() == null || r.getAta() == "" || r.getData() == null)
+			throw new ValorInvalido();
+
+		if (pesquisaReuniao(associacao, r) != null)
+			throw new ReuniaoJaExistente();
+
+		pesquisaAssociacao(associacao).getReunioes().add(r);
+	}
+
+	public void adicionarTaxa(int associacao, Taxa t) throws AssociacaoNaoExistente, TaxaJaExistente, ValorInvalido {
 		// Implementation here...
 	}
 
-	public void adicionar(int associacao, Reuniao r) throws AssociacaoNaoExistente, ReuniaoJaExistente, ValorInvalido {
-		// Implementation here...
-	}
-
-	public void adicionar(int associacao, Taxa t) throws AssociacaoNaoExistente, TaxaJaExistente, ValorInvalido {
-		// Implementation here...
-	}
-
-	public Associacao pesquisaAssociacao(int numero) {
+	public Associacao pesquisaAssociacao(int numeroAssociacao) {
 		for (Associacao associacao : asssociacoes) {
-			if (associacao.getNumero() == numero) {
+			if (associacao.getNumero() == numeroAssociacao) {
 				return associacao;
+			}
+		}
+		return null;
+	}
+
+	public Associado pesquisaAssociado(int numeroAssociado, int numeroAssociacao) {
+		if (pesquisaAssociacao(numeroAssociacao) != null) {
+			for (Associado associado : pesquisaAssociacao(numeroAssociacao).getAssociados()) {
+				if (associado.getNumero() == numeroAssociado) {
+					return associado;
+				}
+			}
+		}
+		return null;
+	}
+
+	public Reuniao pesquisaReuniao(int numeroAssociacao, Reuniao r) {
+		for (Reuniao reuniao : pesquisaAssociacao(numeroAssociacao).getReunioes()) {
+			if (reuniao == r) {
+				return reuniao;
 			}
 		}
 		return null;
