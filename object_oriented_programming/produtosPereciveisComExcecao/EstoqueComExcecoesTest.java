@@ -468,9 +468,9 @@ public class EstoqueComExcecoesTest {
 	public void incluirProdutoComFornecedorComCnpjNegativo() throws ProdutoJaCadastrado, ProdutoInexistente {
 		Estoque estoque = new Estoque();
 		Fornecedor forn1 = new Fornecedor(-48, "Unilever");
-		Fornecedor forn2 = new Fornecedor(-33, "Nestle");
+		// Fornecedor forn2 = new Fornecedor(-33, "Nestle");
 		Produto prod1 = new Produto(12, "Shampoo", 5, 2, forn1);
-		Produto prod2 = new ProdutoPerecivel(14, "Sorvete", 5, 2, forn2);
+		// Produto prod2 = new ProdutoPerecivel(14, "Sorvete", 5, 2, forn2);
 
 		try {
 			estoque.incluir(prod1);
