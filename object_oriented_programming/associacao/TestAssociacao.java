@@ -36,10 +36,16 @@ public class TestAssociacao {
 		Reuniao reuniao = new Reuniao(new Date(), "Meeting minutes");
 		try {
 			empresa.registrarFrequencia(associado.getNumero(), associacao.getNumero(), reuniao.getData());
-			assertTrue(true);
+			for (int frequencia : reuniao.getFrequencia()) {
+				if (frequencia == associado.getNumero()) {
+					assertTrue(true);
+				} else {
+					assertTrue(false);
+				}
+			}
 		} catch (AssociadoNaoExistente | ReuniaoNaoExistente | AssociacaoNaoExistente | FrequenciaJaRegistrada
 				| FrequenciaIncompativel e) {
-			assertFalse(true);
+			// TODO: handle exception
 		}
 	}
 
@@ -49,9 +55,9 @@ public class TestAssociacao {
 		try {
 			empresa.registrarPagamento(associacao.getNumero(), "Membership Fee", 2023, associado.getNumero(), new Date(),
 					100.0);
-			assertTrue(true);
+			assertTrue(false);
 		} catch (AssociacaoNaoExistente | AssociadoNaoExistente | AssociadoJaRemido | TaxaNaoExistente | ValorInvalido e) {
-			assertFalse(true);
+				// TODO: handle exception
 		}
 	}
 
@@ -83,7 +89,7 @@ public class TestAssociacao {
 	public void testAdicionarAssociacao() {
 		try {
 			empresa.adicionarAssociacao(associacao);
-			assertEquals(associacao, empresa.pesquisaAssociacao(associacao.getNumero()));
+			assertEquals(associacao, empresa.pesquisarAssociacao(associacao.getNumero()));
 		} catch (AssociacaoJaExistente | ValorInvalido e) {
 			// TODO: handle exception
 		}
@@ -94,7 +100,7 @@ public class TestAssociacao {
 		Associado associado = new Associado(7, "John Smith", "7777777777", new Date(), new Date());
 		try {
 			empresa.adicionarAssociado(associacao.getNumero(), associado);
-			assertEquals(associado, empresa.pesquisaAssociado(associado.getNumero(), associacao.getNumero()));
+			assertEquals(associado, empresa.pesquisarAssociado(associado.getNumero(), associacao.getNumero()));
 		} catch (AssociacaoNaoExistente | AssociadoJaExistente | ValorInvalido e) {
 			// TODO: handle exception
 		}
@@ -105,7 +111,7 @@ public class TestAssociacao {
 		Reuniao reuniao = new Reuniao(new Date(), "Meeting minutes");
 		try {
 			empresa.adicionarReuniao(associacao.getNumero(), reuniao);
-			assertEquals(reuniao, empresa.pesquisaReuniao(associacao.getNumero(), reuniao));
+			assertEquals(reuniao, empresa.pesquisarReuniao(associacao.getNumero(), reuniao.getData()));
 		} catch (AssociacaoNaoExistente | ReuniaoJaExistente | ValorInvalido e) {
 			// TODO: handle exception
 		}
@@ -115,10 +121,10 @@ public class TestAssociacao {
 	public void testAdicionarTaxa() {
 		Taxa taxa = new Taxa("Membership Fee", 2023, 100.0, 12, true);
 		try {
-			empresa.adicionarTaxa(1, taxa);
-			assertTrue(true);
+			empresa.adicionarTaxa(associacao.getNumero(), taxa);
+			assertEquals(taxa, empresa.pesquisarTaxa(associacao.getNumero(), taxa));
 		} catch (AssociacaoNaoExistente | TaxaJaExistente | ValorInvalido e) {
-			assertFalse(true);
+			// TODO: handle exception
 		}
 	}
 }

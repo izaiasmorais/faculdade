@@ -20,4 +20,9 @@ public class Reuniao {
 	public String getAta() {
 		return ata;
 	}
+
+	public ArrayList<Integer> getFrequencia() {
+		return frequencia;
+	}
+
 }

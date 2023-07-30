@@ -46,4 +46,8 @@ public class Associacao {
 		this.taxa = taxa;
 	}
 
+	public int totalReunioes() {
+		return reunioes.size();
+	}
+
 }
