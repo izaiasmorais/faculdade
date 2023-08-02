@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.time.Clock;
 import java.time.Instant;
@@ -154,8 +155,8 @@ public class EstoqueComExcecoesTest {
 	@Test
 	public void testPesquisarProdutoInexistente() throws ProdutoJaCadastrado, DadosInvalidos, ProdutoInexistente {
 		// Criação de objetos necessários para o teste
-		// Fornecedor fornecedor = new Fornecedor(123456789, "Fornecedor A");
-		// Produto produto = new Produto(1, "Produto A", 10, 1.5, fornecedor);
+		Fornecedor fornecedor = new Fornecedor(123456789, "Fornecedor A");
+		Produto produto = new Produto(1, "Produto A", 10, 1.5, fornecedor);
 		// Criação da instância do Estoque
 		Estoque estoque = new Estoque();
 
@@ -220,39 +221,24 @@ public class EstoqueComExcecoesTest {
 
 	}
 
-	// @Test
-	// public void compraProdutoPerecivelComValidadeMenorQueDataAtual()
-	// throws ProdutoInexistente, DadosInvalidos, ProdutoNaoPerecivel,
-	// ProdutoJaCadastrado, ProdutoVencido {
-	// Estoque estoque = new Estoque();
-	// Fornecedor forn1 = new Fornecedor(33, "Nestle");
-	// Fornecedor forn2 = new Fornecedor(24, "Ambev");
-	// Produto prod1 = new ProdutoPerecivel(14, "Sorvete", 5, 2, forn1);
-	// Produto prod2 = new ProdutoPerecivel(15, "Cerveja", 5, 1, forn2);
-	// Date data =
-	// Date.from(Instant.now(Clock.system(ZoneId.of("America/Sao_Paulo"))));
-	// data.setTime(data.getTime() - 120000);
+	@Test
+	public void compraProdutoPerecivelComValidadeMenorQueDataAtual()
+			throws ProdutoInexistente, DadosInvalidos, ProdutoNaoPerecivel, ProdutoJaCadastrado, ProdutoVencido {
+		Estoque estoque = new Estoque();
+		Fornecedor forn1 = new Fornecedor(33, "Nestle");
+		Fornecedor forn2 = new Fornecedor(24, "Ambev");
+		Produto prod1 = new ProdutoPerecivel(14, "Sorvete", 5, 2, forn1);
+		Produto prod2 = new ProdutoPerecivel(15, "Cerveja", 5, 1, forn2);
+		Date data = Date.from(Instant.now(Clock.system(ZoneId.of("America/Sao_Paulo"))));
+		data.setTime(data.getTime() - 120000);
 
-	// estoque.incluir(prod1);
-	// estoque.incluir(prod2);
-	// estoque.comprar(prod1.getCodigo(), 24, 8, data);
-	// try {
-	// estoque.comprar(prod1.getCodigo(), 10, 5, data);
-	// } catch (ProdutoVencido e) {
-	// // TODO: handle exception
-	// }
-	// try {
-	// estoque.comprar(prod2.getCodigo(), 11, 4.23, data);
-	// } catch (ProdutoVencido e) {
-	// // TODO: handle exception
-	// }
-	// try {
-	// estoque.comprar(prod2.getCodigo(), 5, 2.5, data);
-	// } catch (ProdutoVencido e) {
-	// // TODO: handle exception
-	// }
-
-	// }
+		estoque.incluir(prod1);
+		estoque.incluir(prod2);
+		estoque.comprar(prod1.getCodigo(), 24, 8, data);
+		estoque.comprar(prod1.getCodigo(), 10, 5, data);
+		estoque.comprar(prod2.getCodigo(), 11, 4.23, data);
+		estoque.comprar(prod2.getCodigo(), 5, 2.5, data);
+	}
 
 	@Test
 	public void vendaProdutoPerecivelComValidadeMenorQueDataAtual()
@@ -276,6 +262,31 @@ public class EstoqueComExcecoesTest {
 			estoque.vender(prod1.getCodigo(), 20);
 		} catch (ProdutoVencido e) {
 			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void vendaProdutoPerecivelComValidadeMaiorQueDataAtual()
+			throws ProdutoInexistente, DadosInvalidos, ProdutoNaoPerecivel, ProdutoJaCadastrado, ProdutoVencido,
+			InterruptedException {
+		Estoque estoque = new Estoque();
+		Fornecedor forn1 = new Fornecedor(33, "Nestle");
+		Fornecedor forn2 = new Fornecedor(24, "Ambev");
+		Produto prod1 = new ProdutoPerecivel(14, "Sorvete", 5, 2, forn1);
+		Produto prod2 = new ProdutoPerecivel(15, "Cerveja", 5, 1, forn2);
+		Date data = Date.from(Instant.now(Clock.system(ZoneId.of("America/Sao_Paulo"))));
+		data.setTime(data.getTime() + 120000);
+
+		estoque.incluir(prod1);
+		estoque.incluir(prod2);
+		estoque.comprar(prod1.getCodigo(), 24, 8, data);
+
+		Thread.sleep(100);
+
+		try {
+			estoque.vender(prod1.getCodigo(), 20);
+		} catch (ProdutoVencido e) {
+			fail("Nao podia ter impedido a venda!");
 		}
 	}
 
@@ -428,8 +439,8 @@ public class EstoqueComExcecoesTest {
 	public void comprarItensQueNaoExistem()
 			throws ProdutoJaCadastrado, DadosInvalidos, ProdutoInexistente, ProdutoNaoPerecivel, ProdutoVencido {
 		Estoque estoque = new Estoque();
-		// Fornecedor forn1 = new Fornecedor(48, "Nestle");
-		// Produto prod1 = new Produto(12, "Sorvete", 5, 1, forn1);
+		Fornecedor forn1 = new Fornecedor(48, "Nestle");
+		Produto prod1 = new Produto(12, "Sorvete", 5, 1, forn1);
 		// Verifica se o valor total da venda esta correto
 		try {
 			estoque.comprar(12, 20, 5, null);
@@ -453,9 +464,9 @@ public class EstoqueComExcecoesTest {
 	public void incluirProdutoComFornecedorComCnpjZero() throws ProdutoJaCadastrado, ProdutoInexistente {
 		Estoque estoque = new Estoque();
 		Fornecedor forn1 = new Fornecedor(0, "Unilever");
-		// Fornecedor forn2 = new Fornecedor(0, "Nestle");
+		Fornecedor forn2 = new Fornecedor(0, "Nestle");
 		Produto prod1 = new Produto(12, "Shampoo", 5, 2, forn1);
-		// Produto prod2 = new ProdutoPerecivel(14, "Sorvete", 5, 2, forn2);
+		Produto prod2 = new ProdutoPerecivel(14, "Sorvete", 5, 2, forn2);
 
 		try {
 			estoque.incluir(prod1);
@@ -468,9 +479,9 @@ public class EstoqueComExcecoesTest {
 	public void incluirProdutoComFornecedorComCnpjNegativo() throws ProdutoJaCadastrado, ProdutoInexistente {
 		Estoque estoque = new Estoque();
 		Fornecedor forn1 = new Fornecedor(-48, "Unilever");
-		// Fornecedor forn2 = new Fornecedor(-33, "Nestle");
+		Fornecedor forn2 = new Fornecedor(-33, "Nestle");
 		Produto prod1 = new Produto(12, "Shampoo", 5, 2, forn1);
-		// Produto prod2 = new ProdutoPerecivel(14, "Sorvete", 5, 2, forn2);
+		Produto prod2 = new ProdutoPerecivel(14, "Sorvete", 5, 2, forn2);
 
 		try {
 			estoque.incluir(prod1);

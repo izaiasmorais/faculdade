@@ -83,7 +83,7 @@ public class Estoque implements InterfaceEstoqueComExcecoes {
 		}
 
 		if (produto instanceof ProdutoPerecivel perecivel && quant > 0) {
-
+			double totalLucro = 0;
 			int quantVendidos = 0;
 
 			for (Lote lote : perecivel.getLotes()) {
@@ -91,6 +91,7 @@ public class Estoque implements InterfaceEstoqueComExcecoes {
 					int quantDisponivel = lote.getQuantidade();
 					int quantAVender = Math.min(quant, quantDisponivel);
 
+					totalLucro += quantAVender * produto.getLucro();
 					lote.setQuantidade(quantDisponivel - quantAVender);
 					quantVendidos += quantAVender;
 					quant -= quantAVender;

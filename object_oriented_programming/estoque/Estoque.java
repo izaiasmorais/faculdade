@@ -35,13 +35,11 @@ public class Estoque {
 	}
 
 	public double vender(int codigo, int quantidade) {
-		if (quantidade < 0) {
-			return 0;
-		}
-
-		for (Produto produto : produtos) {
-			if (produto.getCodigo() == codigo) {
-				return produto.venda(quantidade);
+		if (quantidade >= 0) {
+			for (Produto produto : produtos) {
+				if (produto.getCodigo() == codigo) {
+					return produto.venda(quantidade);
+				}
 			}
 		}
 		return -1;
@@ -53,7 +51,7 @@ public class Estoque {
 				return produto.getQuantidade();
 			}
 		}
-		return 0;
+		return -1;
 	}
 
 	public Fornecedor fornecedor(int codigo) {

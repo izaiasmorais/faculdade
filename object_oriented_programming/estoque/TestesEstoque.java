@@ -1,12 +1,23 @@
 package estoque;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
 public class TestesEstoque {
+	@Test
+	public void incluiProdutosComMesmoCodigo() {
+		Estoque estoque = new Estoque();
+		Fornecedor forn1 = new Fornecedor(48, "Nestle");
+		Fornecedor forn2 = new Fornecedor(19, "Ambev");
+		Produto prod1 = new Produto(12, "Sorvete", 5, 2, forn1);
+		Produto prod2 = new Produto(12, "Cerveja", 5, 1, forn2);
+		estoque.incluir(prod1);
+		estoque.incluir(prod2);
+		Produto[] produtos = { prod1 };
+		Produto[] produtosAbaixoDoMinimo = estoque.estoqueAbaixoDoMinimo();
+		assertArrayEquals(produtos, produtosAbaixoDoMinimo);
+	}
 
 	@Test
 	public void produtosAbaixoDoEstoqueMinimo() {
@@ -16,7 +27,6 @@ public class TestesEstoque {
 		Produto prod1 = new Produto(12, "Sorvete", 5, 1, forn1);
 		Produto prod2 = new Produto(15, "Cerveja", 5, 1, forn2);
 		Produto prod3 = new Produto(18, "Cerveja Pilsen", 5, 1, forn2);
-
 		estoque.incluir(prod1);
 		estoque.incluir(prod2);
 		estoque.incluir(prod3);
@@ -26,30 +36,6 @@ public class TestesEstoque {
 		Produto[] produtos = { prod1, prod2 };
 		Produto[] produtosAbaixoDoMinimo = estoque.estoqueAbaixoDoMinimo();
 		assertArrayEquals(produtosAbaixoDoMinimo, produtos);
-	}
-
-	// Comprar
-	// ----------------------------------------------------------------------------------------
-
-	@Test
-	public void compraItensComPrecoNegativo() {
-		Estoque estoque = new Estoque();
-		Fornecedor forn1 = new Fornecedor(48, "Nestle");
-		Produto prod1 = new Produto(12, "Sorvete", 5, 1, forn1);
-
-		estoque.incluir(prod1);
-		estoque.comprar(12, 5, -5);
-		assertTrue(estoque.quantidade(12) == 0);
-
-	}
-
-	@Test
-	public void compraProdutoNaoExistente() {
-		Estoque estoque = new Estoque();
-
-		estoque.comprar(12, 10, 5);
-
-		assertTrue(estoque.quantidade(12) == 0);
 	}
 
 	@Test
@@ -64,178 +50,41 @@ public class TestesEstoque {
 	}
 
 	@Test
-	public void compraItensAtualizacaoValor() {
+	public void compraItensProdutoNaoIncluido() {
+		Estoque estoque = new Estoque();
+		estoque.comprar(12, 10, 4);
+	}
+
+	@Test
+	public void compraQuantidadeNegativaDeItens() {
 		Estoque estoque = new Estoque();
 		Fornecedor forn1 = new Fornecedor(48, "Nestle");
 		Produto prod1 = new Produto(12, "Sorvete", 5, 1, forn1);
 		estoque.incluir(prod1);
-		estoque.comprar(12, 20, 4);
-		estoque.comprar(12, 20, 6);
-
-		// Verifica se a quantidade de itens foi atualizada corretamente
-		assertTrue(estoque.vender(12, 1) == 10);
+		estoque.comprar(12, -10, 4);
+		assertTrue(estoque.quantidade(12) == 0);
 	}
 
 	@Test
-	public void compraItensComQuantNegativo() {
+	public void compraQuantidadeZeroDeItens() {
 		Estoque estoque = new Estoque();
 		Fornecedor forn1 = new Fornecedor(48, "Nestle");
 		Produto prod1 = new Produto(12, "Sorvete", 5, 1, forn1);
 		estoque.incluir(prod1);
-		estoque.comprar(12, -1, 0);
+		estoque.comprar(12, 0, 4);
 		assertTrue(estoque.quantidade(12) == 0);
 	}
 
-	// Incluir -----------------------------------------------------------------
 	@Test
-	public void incluirProdutoJaIncluido() {
+	public void compraItensComPrecoNegativo() {
 		Estoque estoque = new Estoque();
 		Fornecedor forn1 = new Fornecedor(48, "Nestle");
 		Produto prod1 = new Produto(12, "Sorvete", 5, 1, forn1);
 		estoque.incluir(prod1);
-		Produto prod2 = new Produto(12, "Sorvete", 5, 0, forn1);
-		estoque.incluir(prod2);
-		estoque.comprar(12, 10, 1);
-		assertTrue(estoque.vender(12, 1) == 2);
-	}
-
-	@Test
-	public void incluirProdutoAindaNaoIncluido() {
-		Estoque estoque = new Estoque();
-		Fornecedor forn1 = new Fornecedor(48, "Unilever");
-		Produto prod1 = new Produto(12, "Shampoo", 5, 2, forn1);
-		estoque.incluir(prod1);
-		estoque.comprar(12, 5, 3);
-		assertTrue(estoque.quantidade(12) == 5);
-	}
-
-	@Test
-	public void incluirProdutoComCodigoRepetido() {
-		Estoque estoque = new Estoque();
-		Fornecedor forn1 = new Fornecedor(48, "Unilever");
-		Fornecedor forn2 = new Fornecedor(19, "Gilette");
-		Produto prod1 = new Produto(12, "Shampoo", 5, 2, forn1);
-		Produto prod2 = new Produto(12, "Aparelho de Barbear", 5, 1, forn2);
-
-		estoque.incluir(prod1);
-		estoque.incluir(prod2);
-
-		estoque.comprar(12, 5, 1);
-
-		assertTrue(estoque.vender(12, 1) == 3);
-	}
-
-	@Test
-	public void incluirProdutoComCodigoNegativo() {
-		Estoque estoque = new Estoque();
-		Fornecedor forn1 = new Fornecedor(48, "Unilever");
-		Produto prod1 = new Produto(-12, "Shampoo", 5, 2, forn1);
-
-		estoque.incluir(prod1);
-
-		estoque.comprar(-12, 5, 1);
-
-		assertTrue(estoque.quantidade(-12) == 0);
-	}
-
-	public void incluirProdutoComNomeNull() {
-		Estoque estoque = new Estoque();
-		Fornecedor forn1 = new Fornecedor(48, "Unilever");
-		Produto prod1 = new Produto(12, null, 5, 2, forn1);
-
-		estoque.incluir(prod1);
-
-		estoque.comprar(12, 5, 1);
-
+		estoque.comprar(12, 10, -5);
 		assertTrue(estoque.quantidade(12) == 0);
 	}
 
-	@Test
-	public void incluirProdutoComDescricaoSoComEspacosEmBranco() {
-		Estoque estoque = new Estoque();
-		Fornecedor forn1 = new Fornecedor(48, "Unilever");
-		Produto prod1 = new Produto(12, "    ", 5, 2, forn1);
-
-		estoque.incluir(prod1);
-
-		estoque.comprar(12, 5, 1);
-
-		assertTrue(estoque.quantidade(12) == 0);
-	}
-
-	@Test
-	public void incluirProdutoComMinNegativo() {
-		Estoque estoque = new Estoque();
-		Fornecedor forn1 = new Fornecedor(48, "Unilever");
-		Produto prod1 = new Produto(12, "Condicionador", -1, 2, forn1);
-
-		estoque.incluir(prod1);
-
-		estoque.comprar(12, 5, 1);
-
-		assertTrue(estoque.quantidade(12) == 0);
-	}
-
-	@Test
-	public void incluirProdutoComLucroNegativo() {
-		Estoque estoque = new Estoque();
-		Fornecedor forn1 = new Fornecedor(48, "Unilever");
-		Produto prod1 = new Produto(12, "Condicionador", 5, -1, forn1);
-
-		estoque.incluir(prod1);
-
-		estoque.comprar(12, 5, 1);
-
-		assertTrue(estoque.quantidade(12) == 0);
-	}
-
-	@Test
-	public void incluirProdutoComFornecedorComNomeNull() {
-		Estoque estoque = new Estoque();
-		Fornecedor forn1 = new Fornecedor(-48, null);
-		Produto prod1 = new Produto(12, "Shampoo", 5, 2, forn1);
-		estoque.incluir(prod1);
-		estoque.comprar(12, 5, 1);
-
-		assertTrue(estoque.quantidade(12) == 0);
-
-	}
-
-	@Test
-	public void incluirProdutoComFornecedorComNomeSoComEspacosEmBranco() {
-		Estoque estoque = new Estoque();
-		Fornecedor forn1 = new Fornecedor(-48, " ");
-		Produto prod1 = new Produto(12, "Shampoo", 5, 2, forn1);
-		estoque.incluir(prod1);
-		estoque.comprar(12, 5, 1);
-
-		assertTrue(estoque.quantidade(12) == 0);
-	}
-
-	@Test
-	public void incluirProdutoComFornecedorComCnpjNegativo() {
-		Estoque estoque = new Estoque();
-		Fornecedor forn1 = new Fornecedor(-48, "Unilever");
-		Produto prod1 = new Produto(12, "Shampoo", 5, 2, forn1);
-
-		estoque.incluir(prod1);
-		estoque.comprar(12, 5, 1);
-
-		assertTrue(estoque.quantidade(12) == 0);
-	}
-
-	@Test
-	public void incluirProdutoComFornecedorComCnpjZero() {
-		Estoque estoque = new Estoque();
-		Fornecedor forn1 = new Fornecedor(0, "Unilever");
-		Produto prod1 = new Produto(12, "Shampoo", 5, 2, forn1);
-		estoque.incluir(prod1);
-		estoque.comprar(12, 5, 1);
-
-		assertTrue(estoque.quantidade(12) == 0);
-	}
-
-	// Vender
 	@Test
 	public void vendeItens() {
 		Estoque estoque = new Estoque();
@@ -243,30 +92,73 @@ public class TestesEstoque {
 		Produto prod1 = new Produto(12, "Sorvete", 5, 1, forn1);
 		estoque.incluir(prod1);
 		estoque.comprar(12, 20, 5);
-		// Verifica se o valor total da venda esta correto
-		assertTrue(estoque.vender(12, 1) == 10.0);
+		// Verifica se o valor total da venda est� correto
+		assertTrue(2 * 5 == estoque.vender(12, 1));
 	}
 
 	@Test
-	public void vendeItensQuantidadeNegativa() {
+	public void vendeItensProdutoNaoIncluido() {
+		Estoque estoque = new Estoque();
+		estoque.vender(12, 1);
+	}
+
+	@Test
+	public void quantidadeAposVendaProdutos() {
 		Estoque estoque = new Estoque();
 		Fornecedor forn1 = new Fornecedor(48, "Nestle");
 		Produto prod1 = new Produto(12, "Sorvete", 5, 1, forn1);
 		estoque.incluir(prod1);
 		estoque.comprar(12, 20, 5);
-		// Verifica se o valor total da venda esta correto
-		assertTrue(0 == estoque.vender(12, -1));
+		estoque.vender(12, 10);
+		assertEquals(10, estoque.quantidade(12));
 	}
 
 	@Test
-	public void vendeItensQuantidadeMaiorQueEstoque() {
+	public void vendeMesmaQuantidadeQueEstoque() {
 		Estoque estoque = new Estoque();
 		Fornecedor forn1 = new Fornecedor(48, "Nestle");
 		Produto prod1 = new Produto(12, "Sorvete", 5, 1, forn1);
 		estoque.incluir(prod1);
 		estoque.comprar(12, 20, 5);
-		// Verifica se o valor total da venda esta correto
-		assertTrue(-1 == estoque.vender(12, 30));
+		estoque.vender(12, 20);
+		assertEquals(0, estoque.quantidade(12));
+	}
+
+	@Test
+	public void vendeQuantidadeNegativaDeItens() {
+		Estoque estoque = new Estoque();
+		Fornecedor forn1 = new Fornecedor(48, "Nestle");
+		Produto prod1 = new Produto(12, "Sorvete", 5, 1, forn1);
+		estoque.incluir(prod1);
+		estoque.comprar(12, 10, 4);
+		assertTrue(-1 == estoque.vender(12, -5));
+	}
+
+	@Test
+	public void vendeQuantidadeZeroDeItens() {
+		Estoque estoque = new Estoque();
+		Fornecedor forn1 = new Fornecedor(48, "Nestle");
+		Produto prod1 = new Produto(12, "Sorvete", 5, 1, forn1);
+		estoque.incluir(prod1);
+		estoque.comprar(12, 10, 4);
+		assertTrue(-1 == estoque.vender(12, 0));
+	}
+
+	@Test
+	public void vendeMaisItensQueEstoque() {
+		Estoque estoque = new Estoque();
+		Fornecedor forn1 = new Fornecedor(48, "Nestle");
+		Produto prod1 = new Produto(12, "Sorvete", 5, 1, forn1);
+		estoque.incluir(prod1);
+		estoque.comprar(12, 10, 4);
+		assertTrue(-1 == estoque.vender(12, 1000));
+	}
+
+	@Test
+	public void quantidadeProdutoNaoIncluido() {
+		Estoque estoque = new Estoque();
+		int retorno = estoque.quantidade(0);
+		assertEquals(-1, retorno);
 	}
 
 	@Test
@@ -279,4 +171,10 @@ public class TestesEstoque {
 		assertEquals(forn1, fornecedor);
 	}
 
+	@Test
+	public void fornecedorProdutoNaoIncluido() {
+		Estoque estoque = new Estoque();
+		Fornecedor fornecedor = estoque.fornecedor(0);
+		assertNull(fornecedor);
+	}
 }

@@ -24,9 +24,13 @@ public class Estoque implements InterfaceEstoque {
 
 	public boolean incluir(Produto p) {
 
-		if (p != null && !p.getDescricao().trim().isEmpty() && p.getCodigo() > 0 && p != null
+		if (p != null && p.getFornecedor() != null && !p.getDescricao().trim().isEmpty() && p.getCodigo() > 0 && p != null
 				&& !existeProdutoComCodigo(p.getCodigo())
-				&& p.getFornecedor().cnpj > 0) {
+				&& p.getFornecedor().cnpj > 0
+				&& p.getQuantidadeMinima() >= 0
+				&& p.getLucro() >= 0
+				&& !p.getFornecedor().nome.trim().isEmpty()
+				&& !p.getFornecedor().nome.isEmpty()) {
 			produtos.add(p);
 			return true;
 		}
@@ -85,16 +89,22 @@ public class Estoque implements InterfaceEstoque {
 	public double vender(int cod, int quant) {
 		Produto produto = pesquisar(cod);
 
+		if (produto == null || (produto.getQuantidade() < quant))
+			return -1;
+
 		if (produto instanceof ProdutoPerecivel perecivel && quant > 0) {
+			double totalLucro = 0;
 			int quantVendidos = 0;
 
 			for (Lote lote : perecivel.getLotes()) {
 				if (lote.getQuantidade() > 0 && lote.getValidade().after(new Date())) {
 					if (quant <= lote.getQuantidade()) {
+						totalLucro += quant * produto.getLucro();
 						lote.setQuantidade(lote.getQuantidade() - quant);
 						quantVendidos += quant;
 						break;
 					} else {
+						totalLucro += lote.getQuantidade() * produto.getLucro();
 						quantVendidos += lote.getQuantidade();
 						quant -= lote.getQuantidade();
 						lote.setQuantidade(0);
