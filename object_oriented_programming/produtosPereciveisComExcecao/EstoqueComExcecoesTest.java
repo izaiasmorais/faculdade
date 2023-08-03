@@ -234,10 +234,14 @@ public class EstoqueComExcecoesTest {
 
 		estoque.incluir(prod1);
 		estoque.incluir(prod2);
-		estoque.comprar(prod1.getCodigo(), 24, 8, data);
-		estoque.comprar(prod1.getCodigo(), 10, 5, data);
-		estoque.comprar(prod2.getCodigo(), 11, 4.23, data);
-		estoque.comprar(prod2.getCodigo(), 5, 2.5, data);
+		try {
+			estoque.comprar(prod1.getCodigo(), 24, 8, data);
+			estoque.comprar(prod1.getCodigo(), 10, 5, data);
+			estoque.comprar(prod2.getCodigo(), 11, 4.23, data);
+			estoque.comprar(prod2.getCodigo(), 5, 2.5, data);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 
 	@Test

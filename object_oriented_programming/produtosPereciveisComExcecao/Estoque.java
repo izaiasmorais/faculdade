@@ -1,8 +1,5 @@
 package produtosPereciveisComExcecao;
 
-import java.time.Clock;
-import java.time.Instant;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -45,31 +42,27 @@ public class Estoque implements InterfaceEstoqueComExcecoes {
 	public void comprar(int cod, int quantidade, double preco, Date val)
 			throws ProdutoInexistente, DadosInvalidos, ProdutoNaoPerecivel {
 		Produto produto = pesquisar(cod);
-
+		if (produto == null) {
+			throw new ProdutoInexistente();
+		}
+		Date data = new Date();
 		boolean isPerecivel = produto instanceof ProdutoPerecivel;
 
 		if (!isPerecivel && val != null) {
 			throw new ProdutoNaoPerecivel();
 		}
 
-		Date data = Date.from(Instant.now(Clock.system(ZoneId.of("America/Sao_Paulo"))));
-		data.setTime(data.getTime() - 120000);
-
-		if (val != null && val.before(data)) {
+		if ((val != null && val.before(data)) && quantidade <= 0 && preco <= 0) {
 			throw new DadosInvalidos();
 		}
 
 		double novoPreco = ((produto.getQuantidade() * produto.getPrecoCompra()) + (quantidade * preco))
 				/ (produto.getQuantidade() + quantidade);
-
 		produto.setPrecoCompra(novoPreco);
 		produto.setQuantidade(produto.getQuantidade() + quantidade);
 		produto.setPrecoVenda(novoPreco + (novoPreco * produto.getLucro()));
 
-		if (isPerecivel && quantidade >= 0 && preco >= 0) {
-			if (!(produto instanceof ProdutoPerecivel)) {
-				throw new ProdutoNaoPerecivel();
-			}
+		if (isPerecivel) {
 			Lote lote = new Lote(quantidade, val);
 			((ProdutoPerecivel) produto).getLotes().add(lote);
 		}
