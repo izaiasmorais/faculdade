@@ -1,8 +1,10 @@
 package associacao;
 
 import static org.junit.Assert.*;
+
 import java.util.Date;
 import java.util.GregorianCalendar;
+
 import org.junit.Test;
 
 import associacao.excecoes.*;
@@ -505,4 +507,5 @@ public class TesteAssociacaoResumido {
 		double valor = controle.somarPagamentoDeAssociado(1306, 2, "B", 2021, hoje.getTime(), hoje.getTime());
 		assertEquals(1200, valor, 0.01);
 	}
+
 }

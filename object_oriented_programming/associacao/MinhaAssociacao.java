@@ -74,18 +74,43 @@ public class MinhaAssociacao implements InterfaceAssociacao {
 		if (associado == null)
 			throw new AssociacaoNaoExistente();
 
-		if (associado instanceof AssociadoRemido)
-			throw new AssociadoJaRemido();
-
-		if (pesquisarTaxa(numAssociacao, vigencia) == null)
+		Taxa t = pesquisarTaxa(numAssociacao, taxa);
+		if (t == null)
 			throw new TaxaNaoExistente();
 
+		if (t.administrativa == true && associado instanceof AssociadoRemido)
+			throw new AssociadoJaRemido();
+
+		double valorRestante = t.getValorAno() - t.somarPagamentoTotal(numAssociado);
+		boolean ultimaParcela = valorRestante <= t.getValorParcela();
+
+		if (valor > t.getValorAno())
+			throw new ValorInvalido();
+
+		if (!ultimaParcela && valor < t.getValorParcela())
+			throw new ValorInvalido();
+
+		t.adicionarPagamentoDeAssociado(numAssociado, data, valor);
 	}
 
 	public double somarPagamentoDeAssociado(int numAssociacao, int numAssociado, String nomeTaxa, int vigencia,
 			long inicio, long fim)
 			throws AssociacaoNaoExistente, AssociadoNaoExistente, TaxaNaoExistente {
-		return 0.0;
+		if (pesquisarAssociacao(numAssociacao) == null)
+			throw new AssociacaoNaoExistente();
+
+		Associado associado = pesquisarAssociado(numAssociado, numAssociacao);
+		if (associado == null)
+			throw new AssociadoNaoExistente();
+
+		Taxa taxa = pesquisarTaxa(numAssociacao, nomeTaxa);
+		if (taxa == null)
+			throw new TaxaNaoExistente();
+
+		if (taxa.administrativa == true && associado instanceof AssociadoRemido)
+			return 0;
+
+		return taxa.somarPagamentoPeriodo(numAssociado, inicio, fim);
 	}
 
 	public double calcularTotalDeTaxas(int numAssociacao, int vigencia)
@@ -159,11 +184,13 @@ public class MinhaAssociacao implements InterfaceAssociacao {
 				|| t.getVigencia() <= 0)
 			throw new ValorInvalido();
 
-		if (pesquisarTaxa(associacao, t.vigencia) != null)
+		if (pesquisarTaxa(associacao, t.nome) != null)
 			throw new TaxaJaExistente();
 
 		pesquisarAssociacao(associacao).getTaxas().add(t);
 	}
+
+	// Métodos pesquisar
 
 	public Associacao pesquisarAssociacao(int numeroAssociacao) {
 		for (Associacao associacao : asssociacoes) {
@@ -194,20 +221,15 @@ public class MinhaAssociacao implements InterfaceAssociacao {
 		return null;
 	}
 
-	public Taxa pesquisarTaxa(int numeroAssociacao, int vigencia) {
+	public Taxa pesquisarTaxa(int numeroAssociacao, String nome) {
 		Associacao associacao = pesquisarAssociacao(numeroAssociacao);
 
 		for (Taxa taxa : associacao.getTaxas()) {
-			if (taxa.vigencia == vigencia) {
+			if (taxa.nome == nome) {
 				return taxa;
 			}
 		}
 		return null;
 	}
 
-	public void listarAssociacoes() {
-		for (Associacao associacao : asssociacoes) {
-			System.out.println(associacao.getNome());
-		}
-	}
 }
