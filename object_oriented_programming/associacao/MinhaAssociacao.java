@@ -1,6 +1,5 @@
 package associacao;
 
-import java.util.Date;
 import java.util.ArrayList;
 
 import associacao.excecoes.*;
@@ -8,12 +7,35 @@ import associacao.excecoes.*;
 public class MinhaAssociacao implements InterfaceAssociacao {
 	ArrayList<Associacao> asssociacoes = new ArrayList<>();
 
-	public double calcularFrequencia(int numAssociado, int numAssociacao, Date inicio, Date fim)
+	public double calcularFrequencia(int numAssociado, int numAssociacao, long inicio, long fim)
 			throws AssociadoNaoExistente, ReuniaoNaoExistente, AssociacaoNaoExistente {
-		return 0.0;
+		Associacao associacao = pesquisarAssociacao(numAssociacao);
+		if (associacao == null)
+			throw new AssociacaoNaoExistente();
+
+		Associado associado = pesquisarAssociado(numAssociado, numAssociacao);
+		if (associado == null)
+			throw new AssociacaoNaoExistente();
+
+		double reunioes = 0;
+		double frequencia = 0;
+
+		for (Reuniao reuniao : associacao.getReunioes()) {
+			if (reuniao.data >= inicio && reuniao.data <= fim) {
+				reunioes++;
+				if (reuniao.getFrequencia().contains(associado.getNumero())) {
+					frequencia++;
+				}
+			}
+		}
+
+		if (reunioes == 0)
+			throw new ReuniaoNaoExistente();
+
+		return frequencia / reunioes;
 	}
 
-	public void registrarFrequencia(int codigoAssociado, int numAssociacao, Date dataReuniao)
+	public void registrarFrequencia(int codigoAssociado, int numAssociacao, long dataReuniao)
 			throws AssociadoNaoExistente, ReuniaoNaoExistente, AssociacaoNaoExistente,
 			FrequenciaJaRegistrada, FrequenciaIncompativel {
 		if (pesquisarAssociacao(numAssociacao) == null)
@@ -23,6 +45,9 @@ public class MinhaAssociacao implements InterfaceAssociacao {
 
 		if (associado == null)
 			throw new AssociacaoNaoExistente();
+
+		if (associado.getDataAssociacao() > dataReuniao)
+			throw new FrequenciaIncompativel();
 
 		Reuniao reuniao = pesquisarReuniao(numAssociacao, dataReuniao);
 
@@ -35,32 +60,59 @@ public class MinhaAssociacao implements InterfaceAssociacao {
 			}
 		}
 
-		if (associado.getDataAssociacao().before(dataReuniao))
-			throw new FrequenciaIncompativel();
-
 		reuniao.getFrequencia().add(codigoAssociado);
 	}
 
-	public void registrarPagamento(int numAssociacao, String taxa, int vigencia, int numAssociado, Date data,
+	public void registrarPagamento(int numAssociacao, String taxa, int vigencia, int numAssociado, long data,
 			double valor)
 			throws AssociacaoNaoExistente, AssociadoNaoExistente, AssociadoJaRemido, TaxaNaoExistente, ValorInvalido {
-		// Implementation here...
+		Associacao associacao = pesquisarAssociacao(numAssociacao);
+		if (associacao == null)
+			throw new AssociacaoNaoExistente();
+
+		Associado associado = pesquisarAssociado(numAssociado, numAssociacao);
+		if (associado == null)
+			throw new AssociacaoNaoExistente();
+
+		if (associado instanceof AssociadoRemido)
+			throw new AssociadoJaRemido();
+
+		if (pesquisarTaxa(numAssociacao, vigencia) == null)
+			throw new TaxaNaoExistente();
+
 	}
 
 	public double somarPagamentoDeAssociado(int numAssociacao, int numAssociado, String nomeTaxa, int vigencia,
-			Date inicio, Date fim)
+			long inicio, long fim)
 			throws AssociacaoNaoExistente, AssociadoNaoExistente, TaxaNaoExistente {
 		return 0.0;
 	}
 
 	public double calcularTotalDeTaxas(int numAssociacao, int vigencia)
 			throws AssociacaoNaoExistente, TaxaNaoExistente {
-		return 0.0;
+		Associacao associacao = pesquisarAssociacao(numAssociacao);
+		if (associacao == null)
+			throw new AssociacaoNaoExistente();
+
+		boolean taxaExiste = false;
+		double total = 0;
+
+		for (Taxa taxa : associacao.getTaxas()) {
+			if (taxa.vigencia == vigencia) {
+				taxaExiste = true;
+				total = total + taxa.valorAno;
+			}
+		}
+
+		if (!taxaExiste)
+			throw new TaxaNaoExistente();
+
+		return total;
 	}
 
 	// Métodos adicionar
 
-	public void adicionarAssociacao(Associacao a) throws AssociacaoJaExistente, ValorInvalido {
+	public void adicionar(Associacao a) throws AssociacaoJaExistente, ValorInvalido {
 		if (a.getNumero() < 0 || a.getNome() == null || a.getNome().equals(""))
 			throw new ValorInvalido();
 
@@ -70,13 +122,13 @@ public class MinhaAssociacao implements InterfaceAssociacao {
 		asssociacoes.add(a);
 	}
 
-	public void adicionarAssociado(int associacao, Associado a)
+	public void adicionar(int associacao, Associado a)
 			throws AssociacaoNaoExistente, AssociadoJaExistente, ValorInvalido {
 		if (pesquisarAssociacao(associacao) == null)
 			throw new AssociacaoNaoExistente();
 
 		if (a.getNumero() < 0 || a.getNome() == null || a.getNome().equals("") || a.getTelefone() == null
-				|| a.getTelefone().equals("") || a.getNascimento() == null || a.getDataAssociacao() == null)
+				|| a.getTelefone().equals("") || a.getNascimento() == 0 || a.getDataAssociacao() == 0)
 			throw new ValorInvalido();
 
 		if (pesquisarAssociado(a.getNumero(), associacao) != null)
@@ -85,12 +137,12 @@ public class MinhaAssociacao implements InterfaceAssociacao {
 		pesquisarAssociacao(associacao).getAssociados().add(a);
 	}
 
-	public void adicionarReuniao(int associacao, Reuniao r)
+	public void adicionar(int associacao, Reuniao r)
 			throws AssociacaoNaoExistente, ReuniaoJaExistente, ValorInvalido {
 		if (pesquisarAssociacao(associacao) == null)
 			throw new AssociacaoNaoExistente();
 
-		if (r.getAta() == null || r.getAta() == "" || r.getData() == null)
+		if (r.getAta() == null || r.getAta() == "" || r.getData() == 0)
 			throw new ValorInvalido();
 
 		if (pesquisarReuniao(associacao, r.getData()) != null)
@@ -99,7 +151,7 @@ public class MinhaAssociacao implements InterfaceAssociacao {
 		pesquisarAssociacao(associacao).getReunioes().add(r);
 	}
 
-	public void adicionarTaxa(int associacao, Taxa t) throws AssociacaoNaoExistente, TaxaJaExistente, ValorInvalido {
+	public void adicionar(int associacao, Taxa t) throws AssociacaoNaoExistente, TaxaJaExistente, ValorInvalido {
 		if (pesquisarAssociacao(associacao) == null)
 			throw new AssociacaoNaoExistente();
 
@@ -107,10 +159,10 @@ public class MinhaAssociacao implements InterfaceAssociacao {
 				|| t.getVigencia() <= 0)
 			throw new ValorInvalido();
 
-		if (pesquisarTaxa(associacao, t) != null)
+		if (pesquisarTaxa(associacao, t.vigencia) != null)
 			throw new TaxaJaExistente();
 
-		pesquisarAssociacao(associacao).setTaxa(t);
+		pesquisarAssociacao(associacao).getTaxas().add(t);
 	}
 
 	public Associacao pesquisarAssociacao(int numeroAssociacao) {
@@ -133,7 +185,7 @@ public class MinhaAssociacao implements InterfaceAssociacao {
 		return null;
 	}
 
-	public Reuniao pesquisarReuniao(int numeroAssociacao, Date dataReuniao) {
+	public Reuniao pesquisarReuniao(int numeroAssociacao, long dataReuniao) {
 		for (Reuniao reuniao : pesquisarAssociacao(numeroAssociacao).getReunioes()) {
 			if (reuniao.getData() == dataReuniao) {
 				return reuniao;
@@ -142,10 +194,13 @@ public class MinhaAssociacao implements InterfaceAssociacao {
 		return null;
 	}
 
-	public Taxa pesquisarTaxa(int numeroAssociacao, Taxa t) {
-		Taxa taxa = pesquisarAssociacao(numeroAssociacao).getTaxa();
-		if (taxa == t) {
-			return taxa;
+	public Taxa pesquisarTaxa(int numeroAssociacao, int vigencia) {
+		Associacao associacao = pesquisarAssociacao(numeroAssociacao);
+
+		for (Taxa taxa : associacao.getTaxas()) {
+			if (taxa.vigencia == vigencia) {
+				return taxa;
+			}
 		}
 		return null;
 	}

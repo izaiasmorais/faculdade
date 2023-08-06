@@ -5,9 +5,9 @@ import java.util.ArrayList;
 public class Associacao {
 	int numero;
 	String nome;
-	Taxa taxa;
 	ArrayList<Associado> associados = new ArrayList<>();
 	ArrayList<Reuniao> reunioes = new ArrayList<>();
+	ArrayList<Taxa> taxas = new ArrayList<>();
 
 	public Associacao(int numero, String nome) {
 		this.numero = numero;
@@ -38,16 +38,7 @@ public class Associacao {
 		return reunioes;
 	}
 
-	public Taxa getTaxa() {
-		return taxa;
+	public ArrayList<Taxa> getTaxas() {
+		return taxas;
 	}
-
-	public void setTaxa(Taxa taxa) {
-		this.taxa = taxa;
-	}
-
-	public int totalReunioes() {
-		return reunioes.size();
-	}
-
 }

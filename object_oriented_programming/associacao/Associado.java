@@ -1,15 +1,13 @@
 package associacao;
 
-import java.util.Date;
-
 public class Associado {
 	int numero;
 	String nome;
 	String telefone;
-	Date dataAssociacao;
-	Date nascimento;
+	long dataAssociacao;
+	long nascimento;
 
-	public Associado(int numero, String nome, String telefone, Date dataAssociacao, Date nascimento) {
+	public Associado(int numero, String nome, String telefone, long dataAssociacao, long nascimento) {
 		this.numero = numero;
 		this.nome = nome;
 		this.telefone = telefone;
@@ -29,11 +27,11 @@ public class Associado {
 		return telefone;
 	}
 
-	public Date getDataAssociacao() {
+	public long getDataAssociacao() {
 		return dataAssociacao;
 	}
 
-	public Date getNascimento() {
+	public long getNascimento() {
 		return nascimento;
 	}
 }

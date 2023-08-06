@@ -1,18 +1,16 @@
 package associacao;
 
-import java.util.Date;
+public class AssociadoRemido extends Associado {
 
-public class AssociadoRemido {
-	int numero;
-	String nome;
-	String telefone;
-	Date dataAssociacao;
-	Date nascimento;
-	Date dataRemissao;
+	protected long dataRemissao;
 
-	public AssociadoRemido(int numero, String nome, String telefone, Date dataAssociacao, Date nascimento,
-			Date dataRemissao) {
-
+	public AssociadoRemido(int numero, String nome, String telefone, long dataAssociacao, long nascimento,
+			long dataRemissao) {
+		super(numero, nome, telefone, dataAssociacao, nascimento);
+		this.dataRemissao = dataRemissao;
 	}
 
+	public long getDataRemissao() {
+		return dataRemissao;
+	}
 }
