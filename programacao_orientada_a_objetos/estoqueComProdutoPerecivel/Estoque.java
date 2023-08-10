@@ -93,18 +93,18 @@ public class Estoque implements InterfaceEstoque {
 			return -1;
 
 		if (produto instanceof ProdutoPerecivel perecivel && quant > 0) {
-			double totalLucro = 0;
+
 			int quantVendidos = 0;
 
 			for (Lote lote : perecivel.getLotes()) {
 				if (lote.getQuantidade() > 0 && lote.getValidade().after(new Date())) {
 					if (quant <= lote.getQuantidade()) {
-						totalLucro += quant * produto.getLucro();
+
 						lote.setQuantidade(lote.getQuantidade() - quant);
 						quantVendidos += quant;
 						break;
 					} else {
-						totalLucro += lote.getQuantidade() * produto.getLucro();
+
 						quantVendidos += lote.getQuantidade();
 						quant -= lote.getQuantidade();
 						lote.setQuantidade(0);

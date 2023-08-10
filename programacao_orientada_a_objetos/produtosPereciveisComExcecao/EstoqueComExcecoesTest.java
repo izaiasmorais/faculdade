@@ -155,8 +155,8 @@ public class EstoqueComExcecoesTest {
 	@Test
 	public void testPesquisarProdutoInexistente() throws ProdutoJaCadastrado, DadosInvalidos, ProdutoInexistente {
 		// Criação de objetos necessários para o teste
-		Fornecedor fornecedor = new Fornecedor(123456789, "Fornecedor A");
-		Produto produto = new Produto(1, "Produto A", 10, 1.5, fornecedor);
+		// Fornecedor fornecedor = new Fornecedor(123456789, "Fornecedor A");
+		// Produto produto = new Produto(1, "Produto A", 10, 1.5, fornecedor);
 		// Criação da instância do Estoque
 		Estoque estoque = new Estoque();
 
@@ -443,8 +443,8 @@ public class EstoqueComExcecoesTest {
 	public void comprarItensQueNaoExistem()
 			throws ProdutoJaCadastrado, DadosInvalidos, ProdutoInexistente, ProdutoNaoPerecivel, ProdutoVencido {
 		Estoque estoque = new Estoque();
-		Fornecedor forn1 = new Fornecedor(48, "Nestle");
-		Produto prod1 = new Produto(12, "Sorvete", 5, 1, forn1);
+		// Fornecedor forn1 = new Fornecedor(48, "Nestle");
+		// Produto prod1 = new Produto(12, "Sorvete", 5, 1, forn1);
 		// Verifica se o valor total da venda esta correto
 		try {
 			estoque.comprar(12, 20, 5, null);
@@ -468,9 +468,9 @@ public class EstoqueComExcecoesTest {
 	public void incluirProdutoComFornecedorComCnpjZero() throws ProdutoJaCadastrado, ProdutoInexistente {
 		Estoque estoque = new Estoque();
 		Fornecedor forn1 = new Fornecedor(0, "Unilever");
-		Fornecedor forn2 = new Fornecedor(0, "Nestle");
+		// Fornecedor forn2 = new Fornecedor(0, "Nestle");
 		Produto prod1 = new Produto(12, "Shampoo", 5, 2, forn1);
-		Produto prod2 = new ProdutoPerecivel(14, "Sorvete", 5, 2, forn2);
+		// Produto prod2 = new ProdutoPerecivel(14, "Sorvete", 5, 2, forn2);
 
 		try {
 			estoque.incluir(prod1);
@@ -483,9 +483,9 @@ public class EstoqueComExcecoesTest {
 	public void incluirProdutoComFornecedorComCnpjNegativo() throws ProdutoJaCadastrado, ProdutoInexistente {
 		Estoque estoque = new Estoque();
 		Fornecedor forn1 = new Fornecedor(-48, "Unilever");
-		Fornecedor forn2 = new Fornecedor(-33, "Nestle");
+		// Fornecedor forn2 = new Fornecedor(-33, "Nestle");
 		Produto prod1 = new Produto(12, "Shampoo", 5, 2, forn1);
-		Produto prod2 = new ProdutoPerecivel(14, "Sorvete", 5, 2, forn2);
+		// Produto prod2 = new ProdutoPerecivel(14, "Sorvete", 5, 2, forn2);
 
 		try {
 			estoque.incluir(prod1);
