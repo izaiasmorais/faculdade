@@ -1,5 +1,5 @@
 ## Sobre 
-Repo para documentar minhas atividades da faculdade de Ciências da Computação. A princípio, todas na linguagem C.
+Repo para documentar minhas atividades da faculdade de Ciências da Computação. 
 
 ## Matérias 
 - Programação Estruturada
