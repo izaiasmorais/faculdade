@@ -1,4 +1,5 @@
 from node import Node
+from collections import deque
 
 
 class BinarySearchTree:
@@ -61,10 +62,36 @@ class BinarySearchTree:
             return True
         return False
 
+    def in_order(self, node, result):
+        if node is None:
+            return
+        self.in_order(node.left, result)
+        result.append(node.key)
+        self.in_order(node.right, result)
 
-# def em-ordem
-# def pós-ordem
-# def pré-ordem
-# def busca em largura
+    def post_order(self, node, result):
+        if node is None:
+            return
+        self.post_order(node.left, result)
+        self.post_order(node.right, result)
+        result.append(node.key)
 
-# as funções acima comentadas vão servir apenas para printar os elementos na respectiva ordem
+    def pre_order(self, node, result):
+        if node is None:
+            return
+        result.append(node.key)
+        self.pre_order(node.left, result)
+        self.pre_order(node.right, result)
+
+    def level_order(self, node, result):
+        if node is None:
+            return
+        queue = deque()
+        queue.append(node)
+        while queue:
+            current_node = queue.popleft()
+            result.append(current_node.key)
+            if current_node.left:
+                queue.append(current_node.left)
+            if current_node.right:
+                queue.append(current_node.right)

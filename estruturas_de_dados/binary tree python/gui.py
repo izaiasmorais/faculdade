@@ -39,6 +39,18 @@ class GUIApplication:
         self.balance_label = tk.Label(self.info_frame, text="Balanceamento:")
         self.balance_label.pack()
 
+        self.in_order_label = tk.Label(self.info_frame, text="Em Ordem:")
+        self.in_order_label.pack()
+
+        self.post_order_label = tk.Label(self.info_frame, text="Pós-Ordem:")
+        self.post_order_label.pack()
+
+        self.pre_order_label = tk.Label(self.info_frame, text="Pré-Ordem:")
+        self.pre_order_label.pack()
+
+        self.breadth_first_label = tk.Label(self.info_frame, text="Busca em Largura:")
+        self.breadth_first_label.pack()
+
         self.canvas = tk.Canvas(root, width=1920, height=600)
         self.canvas.pack()
 
@@ -48,14 +60,7 @@ class GUIApplication:
             self.tree.insert(name)
             self.display_tree()
             self.update_info()
-
-    def remove_name(self):
-        name_to_remove = self.entry.get()
-        if name_to_remove:
-            removed = self.tree.remove(name_to_remove)
-            if removed:
-                self.update_info()
-                self.display_tree()
+            self.update_traversals()
 
     def update_info(self):
         size = self.tree.size(self.tree.root)
@@ -70,12 +75,29 @@ class GUIApplication:
         self.min_max_label.config(text=f"Menor/Maior: {min_value} / {max_value}")
         self.ipl_label.config(text=f"Comprimento Interno: {ipl}")
         self.balance_label.config(
-            text=f"Balanceamento: {'Balanceada' if is_balanced else 'Não Balanceada'}"
+            text=f"Balanceamento: {'Sim' if is_balanced else 'Não'}"
+        )
+
+    def update_traversals(self):
+        in_order_result = []
+        post_order_result = []
+        pre_order_result = []
+        breadth_first_result = []
+
+        self.tree.in_order(self.tree.root, in_order_result)
+        self.tree.post_order(self.tree.root, post_order_result)
+        self.tree.pre_order(self.tree.root, pre_order_result)
+        self.tree.level_order(self.tree.root, breadth_first_result)
+
+        self.in_order_label.config(text=f"Em Ordem: {' '.join(in_order_result)}")
+        self.post_order_label.config(text=f"Pós-Ordem: {' '.join(post_order_result)}")
+        self.pre_order_label.config(text=f"Pré-Ordem: {' '.join(pre_order_result)}")
+        self.breadth_first_label.config(
+            text=f"Busca em Largura: {' '.join(breadth_first_result)}"
         )
 
     def display_tree(self):
         self.canvas.delete("all")
-        tree_height = self.tree.height(self.tree.root)
         canvas_width = self.canvas.winfo_width()
         self._display_tree_recursive(self.tree.root, canvas_width // 2, 50, 100, 80)
 
@@ -99,5 +121,3 @@ class GUIApplication:
                 self._display_tree_recursive(
                     node.right, x_right, y_right, x_offset * 1.2, y_offset * 1.2
                 )
-
-
