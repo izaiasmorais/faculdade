@@ -13,6 +13,6 @@ Repositório para documentar minhas atividades do curso de Ciências da Computa�
 	- Cálculo II
 - Terceiro período
 	- Banco de Dados
-	- Arquiterua de Computadores
-	- Álbegra Linear
+	- Arquitetura de Computadores
+	- Álgebra Linear
 	- Grafos
