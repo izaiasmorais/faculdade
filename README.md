@@ -15,4 +15,11 @@ Repositório para documentar minhas atividades do curso de Ciências da Computa�
 	- Banco de Dados
 	- Arquitetura de Computadores
 	- Álgebra Linear
-	- Grafos
+	- Teoria e Aplicação em Grafos
+- Quarto período
+  	- Processamento Digital de Imagens
+  	- Projeto e Análise de Algoritmos
+  	- Computação Gráfica
+  	- Programação Linear
+  	- Sistemas Operacionais
+  	- Redes de Computadores
